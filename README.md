@@ -4,18 +4,47 @@ MCP server for World of Warcraft API data. Parses the [ketho.wow-api](https://ma
 
 Built to give AI agents (Claude Code, Claude Desktop, etc.) accurate, structured WoW API data without relying on wiki template parsing.
 
-## Data
+## Quick Start
 
-Indexes the full WoW API from the extension's LuaLS annotations:
+### 1. Install the VS Code extension
 
-- **8,000+ functions** with full signatures, parameters, return types, and wiki links
-- **90+ deprecated functions** with replacement function, replacement URL, and deprecation patch version
-- **260 C_ namespaces** (C_SpellBook, C_Item, C_Spell, etc.)
-- **860+ widget types** with methods (Frame, Button, ScriptRegion, etc.)
-- **843 enums** with values (Enum.SpellBookSpellBank, etc.)
-- **1,716 events** with payload parameters (ADDON_LOADED, PLAYER_LOGIN, etc.)
-- **1,591 CVars**
-- **Game version compatibility** per function (Mainline, Vanilla, Mists)
+The server reads WoW API data from the [ketho.wow-api](https://marketplace.visualstudio.com/items?itemName=ketho.wow-api) VS Code extension. Install it first:
+
+```bash
+code --install-extension ketho.wow-api
+```
+
+### 2. Add to your MCP client
+
+**Claude Code** — add to your project's `.mcp.json`:
+
+macOS / Linux:
+```json
+{
+  "mcpServers": {
+    "wow-api": {
+      "command": "npx",
+      "args": ["wow-api-mcp"]
+    }
+  }
+}
+```
+
+Windows:
+```json
+{
+  "mcpServers": {
+    "wow-api": {
+      "command": "cmd",
+      "args": ["/c", "npx", "wow-api-mcp"]
+    }
+  }
+}
+```
+
+### 3. Restart your MCP client
+
+Restart Claude Code (or whichever client you're using) and the tools will be available.
 
 ## Tools
 
@@ -29,174 +58,7 @@ Indexes the full WoW API from the extension's LuaLS annotations:
 | `get_enum(name)` | Look up enum values |
 | `get_event(name)` | Look up event payload parameters |
 
-## Prerequisites
-
-### 1. Node.js
-
-Node.js 18+ is required.
-
-### 2. ketho.wow-api VS Code Extension
-
-The MCP server reads data from this extension's annotation files. Install it in VS Code:
-
-```bash
-code --install-extension ketho.wow-api
-```
-
-Or install from the [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=ketho.wow-api).
-
-The server auto-discovers the extension from these locations:
-- `~/.vscode/extensions/` (VS Code)
-- `~/.vscode-insiders/extensions/` (VS Code Insiders)
-- `~/.vscode-oss/extensions/` (VS Code OSS / VSCodium)
-- `~/.cursor/extensions/` (Cursor)
-
-If your extension is installed elsewhere, set the `WOW_API_EXT_PATH` environment variable to the extension root directory (the folder containing the `Annotations/` directory).
-
-## Setup
-
-### Claude Code
-
-Add to your project's `.mcp.json`:
-
-**macOS / Linux:**
-```json
-{
-  "mcpServers": {
-    "wow-api": {
-      "command": "npx",
-      "args": ["wow-api-mcp"]
-    }
-  }
-}
-```
-
-**Windows:**
-```json
-{
-  "mcpServers": {
-    "wow-api": {
-      "command": "cmd",
-      "args": ["/c", "npx", "wow-api-mcp"]
-    }
-  }
-}
-```
-
-Then restart Claude Code to pick up the new server.
-
-To auto-allow all tools without permission prompts, add to your Claude Code settings (`.claude/settings.local.json`):
-
-```json
-{
-  "permissions": {
-    "allow": ["mcp__wow-api__*"]
-  }
-}
-```
-
-### Claude Desktop
-
-Add to your Claude Desktop config file:
-
-- **Windows**: `%APPDATA%\Claude\claude_desktop_config.json`
-- **macOS**: `~/Library/Application Support/Claude/claude_desktop_config.json`
-
-**macOS / Linux:**
-```json
-{
-  "mcpServers": {
-    "wow-api": {
-      "command": "npx",
-      "args": ["wow-api-mcp"]
-    }
-  }
-}
-```
-
-**Windows:**
-```json
-{
-  "mcpServers": {
-    "wow-api": {
-      "command": "cmd",
-      "args": ["/c", "npx", "wow-api-mcp"]
-    }
-  }
-}
-```
-
-If the extension is not in a standard VS Code location, add the env var:
-
-```json
-{
-  "mcpServers": {
-    "wow-api": {
-      "command": "cmd",
-      "args": ["/c", "npx", "wow-api-mcp"],
-      "env": {
-        "WOW_API_EXT_PATH": "/path/to/ketho.wow-api-0.22.1"
-      }
-    }
-  }
-}
-```
-
-### VS Code (Copilot / Other MCP Clients)
-
-Add to your workspace `.vscode/mcp.json`:
-
-**macOS / Linux:**
-```json
-{
-  "servers": {
-    "wow-api": {
-      "command": "npx",
-      "args": ["wow-api-mcp"]
-    }
-  }
-}
-```
-
-**Windows:**
-```json
-{
-  "servers": {
-    "wow-api": {
-      "command": "cmd",
-      "args": ["/c", "npx", "wow-api-mcp"]
-    }
-  }
-}
-```
-
-### From Source (Development)
-
-If running from a local clone instead of npm:
-
-```bash
-git clone https://github.com/Wutname1/wow-api-mcp.git
-cd wow-api-mcp
-npm install
-node src/index.mjs
-```
-
-Or in MCP config:
-
-```json
-{
-  "mcpServers": {
-    "wow-api": {
-      "command": "node",
-      "args": ["/path/to/wow-api-mcp/src/index.mjs"]
-    }
-  }
-}
-```
-
 ## Usage Examples
-
-Once connected, your AI agent can query the WoW API:
 
 ```
 > lookup_api("IsSpellKnown")
@@ -237,14 +99,137 @@ Enum.SpellBookSpellBank:
   Pet = 1
 ```
 
+## Data
+
+Indexes the full WoW API from the extension's LuaLS annotations:
+
+- **8,000+ functions** with full signatures, parameters, return types, and wiki links
+- **90+ deprecated functions** with replacement function, replacement URL, and deprecation patch version
+- **260 C_ namespaces** (C_SpellBook, C_Item, C_Spell, etc.)
+- **860+ widget types** with methods (Frame, Button, ScriptRegion, etc.)
+- **843 enums** with values (Enum.SpellBookSpellBank, etc.)
+- **1,716 events** with payload parameters (ADDON_LOADED, PLAYER_LOGIN, etc.)
+- **1,591 CVars**
+- **Game version compatibility** per function (Mainline, Vanilla, Mists)
+
+## Other MCP Clients
+
+### Claude Desktop
+
+Add to your config file:
+
+- **Windows**: `%APPDATA%\Claude\claude_desktop_config.json`
+- **macOS**: `~/Library/Application Support/Claude/claude_desktop_config.json`
+
+macOS / Linux:
+```json
+{
+  "mcpServers": {
+    "wow-api": {
+      "command": "npx",
+      "args": ["wow-api-mcp"]
+    }
+  }
+}
+```
+
+Windows:
+```json
+{
+  "mcpServers": {
+    "wow-api": {
+      "command": "cmd",
+      "args": ["/c", "npx", "wow-api-mcp"]
+    }
+  }
+}
+```
+
+### VS Code (Copilot / Other MCP Clients)
+
+Add to your workspace `.vscode/mcp.json`:
+
+macOS / Linux:
+```json
+{
+  "servers": {
+    "wow-api": {
+      "command": "npx",
+      "args": ["wow-api-mcp"]
+    }
+  }
+}
+```
+
+Windows:
+```json
+{
+  "servers": {
+    "wow-api": {
+      "command": "cmd",
+      "args": ["/c", "npx", "wow-api-mcp"]
+    }
+  }
+}
+```
+
+## Configuration
+
+### Extension Discovery
+
+The server auto-discovers the `ketho.wow-api` extension from these locations:
+- `~/.vscode/extensions/` (VS Code)
+- `~/.vscode-insiders/extensions/` (VS Code Insiders)
+- `~/.vscode-oss/extensions/` (VS Code OSS / VSCodium)
+- `~/.cursor/extensions/` (Cursor)
+
+If your extension is installed elsewhere, set the `WOW_API_EXT_PATH` environment variable:
+
+```json
+{
+  "mcpServers": {
+    "wow-api": {
+      "command": "cmd",
+      "args": ["/c", "npx", "wow-api-mcp"],
+      "env": {
+        "WOW_API_EXT_PATH": "/path/to/ketho.wow-api-0.22.1"
+      }
+    }
+  }
+}
+```
+
+### Auto-allow Tools (Claude Code)
+
+To skip permission prompts, add to `.claude/settings.local.json`:
+
+```json
+{
+  "permissions": {
+    "allow": ["mcp__wow-api__*"]
+  }
+}
+```
+
 ## Updating
 
-The MCP server reads from the installed VS Code extension at startup. When the extension updates (typically with major WoW patches):
+The server reads from the installed VS Code extension at startup. When the extension updates (typically with major WoW patches):
 
 1. Update the extension in VS Code
-2. Restart your MCP client (Claude Code, Claude Desktop, etc.)
+2. Restart your MCP client
 
-The server will automatically pick up the latest version of the extension.
+The server picks up the latest data automatically.
+
+## Development
+
+To run from source:
+
+```bash
+git clone https://github.com/Wutname1/wow-api-mcp.git
+cd wow-api-mcp
+npm install
+node src/index.mjs
+```
 
 ## License
 
