@@ -5,11 +5,44 @@ import { parseFlavorFile, parseDeprecatedFile } from './parsers/ts-data.mjs';
 
 /**
  * Discover the ketho.wow-api extension path.
+ *
+ * Resolution order:
+ * 1. WOW_API_EXT_PATH env var (explicit override, points to extension root)
+ * 2. Auto-discover from VS Code extensions directories:
+ *    - Default VS Code: ~/.vscode/extensions/
+ *    - VS Code Insiders: ~/.vscode-insiders/extensions/
+ *    - VS Code OSS: ~/.vscode-oss/extensions/
+ *    - Cursor: ~/.cursor/extensions/
  */
 function findExtensionPath() {
-	const homeDir = process.env.USERPROFILE || process.env.HOME;
-	const extensionsDir = join(homeDir, '.vscode', 'extensions');
+	// 1. Explicit override via env var
+	if (process.env.WOW_API_EXT_PATH) {
+		const extPath = process.env.WOW_API_EXT_PATH;
+		if (existsSync(join(extPath, 'Annotations'))) {
+			return extPath;
+		}
+		// Maybe they pointed to the extensions dir, not the specific extension
+		return scanExtensionsDir(extPath);
+	}
 
+	// 2. Auto-discover from known VS Code extension directories
+	const homeDir = process.env.USERPROFILE || process.env.HOME;
+	const candidates = ['.vscode', '.vscode-insiders', '.vscode-oss', '.cursor'];
+
+	for (const candidate of candidates) {
+		const extensionsDir = join(homeDir, candidate, 'extensions');
+		const result = scanExtensionsDir(extensionsDir);
+		if (result) return result;
+	}
+
+	return null;
+}
+
+/**
+ * Scan an extensions directory for the ketho.wow-api extension.
+ * Returns the path to the latest version found, or null.
+ */
+function scanExtensionsDir(extensionsDir) {
 	try {
 		const entries = readdirSync(extensionsDir);
 		const matches = entries
@@ -20,9 +53,8 @@ function findExtensionPath() {
 			return join(extensionsDir, matches[0]);
 		}
 	} catch {
-		// Fall through
+		// Directory doesn't exist or not readable
 	}
-
 	return null;
 }
 
@@ -46,7 +78,11 @@ export class DataStore {
 	load() {
 		const extPath = findExtensionPath();
 		if (!extPath) {
-			throw new Error('Could not find ketho.wow-api VS Code extension. Is it installed?');
+			throw new Error(
+				'Could not find ketho.wow-api VS Code extension.\n' +
+					'Install it: code --install-extension ketho.wow-api\n' +
+					'Or set WOW_API_EXT_PATH env var to the extension directory.'
+			);
 		}
 
 		// Read extension version from package.json
