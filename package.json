@@ -1,0 +1,13 @@
+{
+  "name": "wow-api-mcp",
+  "version": "1.0.0",
+  "description": "MCP server for World of Warcraft API data from ketho.wow-api annotations",
+  "type": "module",
+  "main": "src/index.mjs",
+  "scripts": {
+    "start": "node src/index.mjs"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.26.0"
+  }
+}
