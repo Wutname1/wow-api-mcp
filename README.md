@@ -57,18 +57,27 @@ If your extension is installed elsewhere, set the `WOW_API_EXT_PATH` environment
 
 ### Claude Code
 
-```bash
-npx wow-api-mcp
-```
+Add to your project's `.mcp.json`:
 
-Or add to your project's `.mcp.json`:
-
+**macOS / Linux:**
 ```json
 {
   "mcpServers": {
     "wow-api": {
       "command": "npx",
       "args": ["wow-api-mcp"]
+    }
+  }
+}
+```
+
+**Windows:**
+```json
+{
+  "mcpServers": {
+    "wow-api": {
+      "command": "cmd",
+      "args": ["/c", "npx", "wow-api-mcp"]
     }
   }
 }
@@ -93,6 +102,7 @@ Add to your Claude Desktop config file:
 - **Windows**: `%APPDATA%\Claude\claude_desktop_config.json`
 - **macOS**: `~/Library/Application Support/Claude/claude_desktop_config.json`
 
+**macOS / Linux:**
 ```json
 {
   "mcpServers": {
@@ -104,14 +114,26 @@ Add to your Claude Desktop config file:
 }
 ```
 
+**Windows:**
+```json
+{
+  "mcpServers": {
+    "wow-api": {
+      "command": "cmd",
+      "args": ["/c", "npx", "wow-api-mcp"]
+    }
+  }
+}
+```
+
 If the extension is not in a standard VS Code location, add the env var:
 
 ```json
 {
   "mcpServers": {
     "wow-api": {
-      "command": "npx",
-      "args": ["wow-api-mcp"],
+      "command": "cmd",
+      "args": ["/c", "npx", "wow-api-mcp"],
       "env": {
         "WOW_API_EXT_PATH": "/path/to/ketho.wow-api-0.22.1"
       }
@@ -124,12 +146,25 @@ If the extension is not in a standard VS Code location, add the env var:
 
 Add to your workspace `.vscode/mcp.json`:
 
+**macOS / Linux:**
 ```json
 {
   "servers": {
     "wow-api": {
       "command": "npx",
       "args": ["wow-api-mcp"]
+    }
+  }
+}
+```
+
+**Windows:**
+```json
+{
+  "servers": {
+    "wow-api": {
+      "command": "cmd",
+      "args": ["/c", "npx", "wow-api-mcp"]
     }
   }
 }
