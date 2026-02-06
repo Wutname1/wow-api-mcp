@@ -1,5 +1,9 @@
 # wow-api-mcp
 
+[![npm version](https://img.shields.io/npm/v/wow-api-mcp)](https://www.npmjs.com/package/wow-api-mcp)
+[![npm downloads](https://img.shields.io/npm/dt/wow-api-mcp)](https://www.npmjs.com/package/wow-api-mcp)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 MCP server for World of Warcraft API data. Parses the [ketho.wow-api](https://marketplace.visualstudio.com/items?itemName=ketho.wow-api) VS Code extension's annotations and exposes structured WoW API data through queryable tools — including deprecated functions, replacements, parameter types, return types, game version compatibility, enums, events, and widget methods.
 
 Built to give AI agents (Claude Code, Claude Desktop, etc.) accurate, structured WoW API data without relying on wiki template parsing.
@@ -45,6 +49,16 @@ Windows:
 ### 3. Restart your MCP client
 
 Restart Claude Code (or whichever client you're using) and the tools will be available.
+
+## Features
+
+- **Deprecated function tracking** — know instantly if an API is deprecated, what replaced it, and which patch changed it
+- **Full function signatures** — parameters with types, optional flags, defaults, and return values
+- **Game version awareness** — see if a function exists in Mainline, Vanilla, or Mists
+- **Namespace browsing** — explore all 260+ C_ namespaces
+- **Widget API** — look up methods for any UI widget class (Frame, Button, etc.)
+- **Enum resolution** — get actual values for any WoW enum
+- **Event payloads** — see what parameters each frame event passes
 
 ## Tools
 

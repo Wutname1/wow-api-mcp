@@ -1,0 +1,53 @@
+name: Publish Release
+
+on:
+  push:
+    tags:
+      - "*.*.*"
+
+permissions:
+  id-token: write
+  contents: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          registry-url: "https://registry.npmjs.org"
+
+      - name: Get version from tag
+        id: version
+        run: echo "VERSION=${GITHUB_REF_NAME}" >> "$GITHUB_OUTPUT"
+
+      - name: Generate changelog
+        run: |
+          # Find the previous tag
+          PREV_TAG=$(git tag --sort=-version:refname | grep -A1 "^${GITHUB_REF_NAME}$" | tail -1)
+
+          if [ "$PREV_TAG" = "$GITHUB_REF_NAME" ] || [ -z "$PREV_TAG" ]; then
+            COMMITS=$(git log --pretty=format:"- %s" --no-merges $GITHUB_REF_NAME)
+          else
+            COMMITS=$(git log --pretty=format:"- %s" --no-merges "$PREV_TAG..$GITHUB_REF_NAME")
+          fi
+
+          echo "$COMMITS" > /tmp/changelog.md
+          echo "Changelog:"
+          cat /tmp/changelog.md
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: ${{ github.ref_name }}
+          body_path: /tmp/changelog.md
+
+      - run: npm ci
+      - run: npm version "${{ steps.version.outputs.VERSION }}" --no-git-tag-version --allow-same-version
+      - run: npm publish
