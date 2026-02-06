@@ -4,6 +4,13 @@
   "description": "MCP server for World of Warcraft API data — functions, deprecations, enums, events, widgets. Parses ketho.wow-api VS Code extension annotations.",
   "type": "module",
   "main": "src/index.mjs",
+  "bin": {
+    "wow-api-mcp": "src/index.mjs"
+  },
+  "files": [
+    "src/",
+    "README.md"
+  ],
   "scripts": {
     "start": "node src/index.mjs"
   },
@@ -17,6 +24,10 @@
     "claude",
     "model-context-protocol"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Wutname1/wow-api-mcp.git"
+  },
   "license": "MIT",
   "engines": {
     "node": ">=18.0.0"

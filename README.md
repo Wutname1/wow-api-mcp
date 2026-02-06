@@ -53,25 +53,22 @@ The server auto-discovers the extension from these locations:
 
 If your extension is installed elsewhere, set the `WOW_API_EXT_PATH` environment variable to the extension root directory (the folder containing the `Annotations/` directory).
 
-### 3. Install Dependencies
-
-```bash
-cd wow-api-mcp
-npm install
-```
-
 ## Setup
 
 ### Claude Code
 
-Add to your project's `.mcp.json` (or `~/.claude.json` for global access):
+```bash
+npx wow-api-mcp
+```
+
+Or add to your project's `.mcp.json`:
 
 ```json
 {
   "mcpServers": {
     "wow-api": {
-      "command": "node",
-      "args": ["/path/to/wow-api-mcp/src/index.mjs"]
+      "command": "npx",
+      "args": ["wow-api-mcp"]
     }
   }
 }
@@ -79,7 +76,7 @@ Add to your project's `.mcp.json` (or `~/.claude.json` for global access):
 
 Then restart Claude Code to pick up the new server.
 
-To auto-allow all tools without permission prompts, add to your Claude Code settings:
+To auto-allow all tools without permission prompts, add to your Claude Code settings (`.claude/settings.local.json`):
 
 ```json
 {
@@ -100,8 +97,8 @@ Add to your Claude Desktop config file:
 {
   "mcpServers": {
     "wow-api": {
-      "command": "node",
-      "args": ["C:\\path\\to\\wow-api-mcp\\src\\index.mjs"]
+      "command": "npx",
+      "args": ["wow-api-mcp"]
     }
   }
 }
@@ -113,10 +110,10 @@ If the extension is not in a standard VS Code location, add the env var:
 {
   "mcpServers": {
     "wow-api": {
-      "command": "node",
-      "args": ["C:\\path\\to\\wow-api-mcp\\src\\index.mjs"],
+      "command": "npx",
+      "args": ["wow-api-mcp"],
       "env": {
-        "WOW_API_EXT_PATH": "C:\\path\\to\\ketho.wow-api-0.22.1"
+        "WOW_API_EXT_PATH": "/path/to/ketho.wow-api-0.22.1"
       }
     }
   }
@@ -131,8 +128,32 @@ Add to your workspace `.vscode/mcp.json`:
 {
   "servers": {
     "wow-api": {
+      "command": "npx",
+      "args": ["wow-api-mcp"]
+    }
+  }
+}
+```
+
+### From Source (Development)
+
+If running from a local clone instead of npm:
+
+```bash
+git clone https://github.com/Wutname1/wow-api-mcp.git
+cd wow-api-mcp
+npm install
+node src/index.mjs
+```
+
+Or in MCP config:
+
+```json
+{
+  "mcpServers": {
+    "wow-api": {
       "command": "node",
-      "args": ["${workspaceFolder}/wow-api-mcp/src/index.mjs"]
+      "args": ["/path/to/wow-api-mcp/src/index.mjs"]
     }
   }
 }
