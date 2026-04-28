@@ -1,3 +1,5 @@
+[![MseeP.ai Security Assessment Badge](https://mseep.net/pr/wutname1-wow-api-mcp-badge.png)](https://mseep.ai/app/wutname1-wow-api-mcp)
+
 # wow-api-mcp
 
 [![npm version](https://img.shields.io/npm/v/wow-api-mcp)](https://www.npmjs.com/package/wow-api-mcp)
